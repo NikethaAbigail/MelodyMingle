@@ -1,0 +1,28 @@
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
+Future<Map<String, dynamic>> fetchSpotifyData(String endpoint, String accessToken) async {
+  final response = await http.get(
+    Uri.parse('https://api.spotify.com/v1/$endpoint'),
+    headers: {
+      'Authorization': 'Bearer $accessToken',
+    },
+  );
+
+  if (response.statusCode == 200) {
+    return json.decode(response.body);
+  } else {
+    throw Exception('Failed to load data');
+  }
+}
+
+// Example usage
+Future<void> exampleFetch(String accessToken) async {
+  final playlists = await fetchSpotifyData('me/playlists', accessToken);
+  final tracks = await fetchSpotifyData('playlists/{playlist_id}/tracks', accessToken); // Replace {playlist_id} with actual ID
+  final albums = await fetchSpotifyData('me/albums', accessToken);
+
+  print(playlists);
+  print(tracks);
+  print(albums);
+}
