@@ -1,0 +1,45 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_web_auth/flutter_web_auth.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
+class SpotifyAuth extends StatefulWidget {
+  @override
+  _SpotifyAuthState createState() => _SpotifyAuthState();
+}
+
+class _SpotifyAuthState extends State<SpotifyAuth> {
+  String? accessToken;
+
+  Future<void> authenticate() async {
+    final clientId = 'YOUR_SPOTIFY_CLIENT_ID';
+    final redirectUri = 'YOUR_REDIRECT_URI';
+    final authUrl =
+        'https://accounts.spotify.com/authorize?client_id=$clientId&response_type=token&redirect_uri=$redirectUri&scope=user-library-read';
+
+    final result = await FlutterWebAuth.authenticate(url: authUrl, callbackUrlScheme: 'YOUR_CALLBACK_SCHEME');
+
+    final token = Uri.parse(result).fragment.split('&').firstWhere((e) => e.startsWith('access_token')).split('=')[1];
+
+    setState(() {
+      accessToken = token;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Spotify Authentication'),
+      ),
+      body: Center(
+        child: accessToken == null
+            ? ElevatedButton(
+                onPressed: authenticate,
+                child: Text('Login with Spotify'),
+              )
+            : Text('Logged in with token: $accessToken'),
+      ),
+    );
+  }
+}
