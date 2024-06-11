@@ -1,0 +1,31 @@
+import 'package:flutter/material.dart';
+import 'spotify_auth.dart';
+import 'home_page.dart';
+import 'audio_player_screen.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Spotify Clone',
+      theme: ThemeData(
+        primaryColor: Colors.black,
+        accentColor: Color(0xFF1DB954),
+        scaffoldBackgroundColor: Colors.black,
+        appBarTheme: AppBarTheme(
+          elevation: 0,
+          backgroundColor: Colors.black,
+        ),
+      ),
+      home: SpotifyAuth(),
+      routes: {
+        '/home': (context) => HomePage(),
+        '/audio_player': (context) => AudioPlayerScreen(audioUrl: 'YOUR_AUDIO_URL'), // Replace with actual URL
+      },
+    );
+  }
+}
